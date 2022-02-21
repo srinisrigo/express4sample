@@ -4,7 +4,7 @@ var crypto = require('crypto');
 
 mkdirp.sync('db');
 
-var db = new sqlite3.Database('db/todos.db');
+var db = new sqlite3.Database('db/sample.db');
 
 db.serialize(function() {
   // create the database schema for the todos app
@@ -20,7 +20,13 @@ db.serialize(function() {
     completed INTEGER \
   )");
   
-  // create an initial user (username: alice, password: letmein)
+  db.run("CREATE TABLE IF NOT EXISTS todo_items ( \
+    id varchar(36), \
+    name varchar(255), \
+    completed boolean \
+  )");
+  
+  // create an initial user (username: srini, password: letmein)
   var salt = crypto.randomBytes(16);
   db.run('INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES (?, ?, ?)', [
     'srini',

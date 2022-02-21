@@ -119,4 +119,13 @@ router.post('/clear-completed', ensureLoggedIn, function(req, res, next) {
   });
 });
 
+/* GET home page. */
+router.get('/react', function(req, res, next) {
+  if (!req.user) { return res.render('home'); }
+  next();
+}, fetchTodos, function(req, res, next) {
+  res.locals.filter = null;
+  res.render('react', { user: req.user });
+});
+
 module.exports = router;

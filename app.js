@@ -13,6 +13,7 @@ var SQLiteStore = require('connect-sqlite3')(session);
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
+var apiRouter = require('./routes/api/todo');
 
 var app = express();
 
@@ -28,12 +29,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'express$%^134',
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
   store: new SQLiteStore({ db: 'sessions.db', dir: 'db' })
 }));
-app.use(csrf());
+app.use(csrf({cookie: {
+  httpOnly: true,
+}}));
 app.use(passport.authenticate('session'));
 app.use(function(req, res, next) {
   var msgs = req.session.messages || [];
@@ -44,11 +47,13 @@ app.use(function(req, res, next) {
 });
 app.use(function(req, res, next) {
   res.locals.csrfToken = req.csrfToken();
+  res.cookie('XSRF-TOKEN', req.csrfToken());
   next();
 });
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
+app.use('/api/items', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
