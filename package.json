@@ -1,0 +1,50 @@
+{
+  "name": "express-4-sample",
+  "version": "1.0.0",
+  "description": "express four version sample",
+  "main": "www",
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srinisrigo/express4sample.git"
+  },
+  "keywords": [
+    "example",
+    "express",
+    "passport",
+    "sqlite"
+  ],
+  "author": {
+    "name": "Srinivasan",
+    "email": "srinisrigo@gmail.com"
+  },
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/srinisrigo/express4sample/issues"
+  },
+  "homepage": "https://github.com/srinisrigo/express4sample#readme",
+  "dependencies": {
+    "connect-ensure-login": "^0.1.1",
+    "connect-sqlite3": "^0.9.13",
+    "cookie-parser": "~1.4.4",
+    "csurf": "^1.11.0",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-session": "^1.17.2",
+    "http-errors": "~1.6.3",
+    "mkdirp": "^1.0.4",
+    "morgan": "~1.9.1",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "pluralize": "^8.0.0",
+    "pug": "^3.0.2",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

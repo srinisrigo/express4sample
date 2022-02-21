@@ -1,0 +1,21 @@
+extends layout
+
+block header
+    link(rel='stylesheet' href='/css/login.css')
+block content
+    section.prompt
+        h3 todos
+        h1 Sign up
+        form(action='/signup' method='post')
+            section
+            label(for='username') Username
+            input#username(name='username' type='text' autocomplete='username' required='')
+            section
+            label(for='new-password') Password
+            input#new-password(name='password' type='password' autocomplete='new-password' required='')
+            input(type='hidden' name='_csrf' value=csrfToken)
+            button(type='submit') Sign up
+        hr
+        p.help
+            | Already have an account? 
+            a(href='/login') Sign in

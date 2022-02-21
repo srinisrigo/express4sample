@@ -1,0 +1,60 @@
+extends layout
+
+block header
+    link(rel='stylesheet' href='/css/app.css')
+block content
+  section.todoapp
+    nav.nav
+      ul
+        li.user= user.username
+        li
+          form(action='/logout' method='post')
+            button.logout(type='submit') Sign out
+            input(type='hidden' name='_csrf' value=csrfToken)
+    header.header
+      h1 todos
+      form(action='/' method='post')
+        input.new-todo(name='title' placeholder='What needs to be done?' autofocus='')
+        if filter
+          input(type='hidden' name='filter' value=filter)
+        input(type='hidden' name='_csrf' value=csrfToken)
+    if (activeCount + completedCount) > 0
+      section.main
+        form(action='/toggle-all' method='post')
+          input#toggle-all.toggle-all(type='checkbox' name='completed' checked=activecount onchange="this.form.submit();")
+          label(for='toggle-all') Mark all as complete
+          input(type='hidden' name='_csrf' value=csrfToken)
+        ul.todo-list
+          each todo in todos
+            li(class=todo.completed?'completed':'')
+              form(action=todo.url method='post')
+                .view
+                  input.toggle(type='checkbox' name='completed' checked=todo.completed && 'checked' onchange="this.form.submit();")
+                  label(ondblclick="this.closest('li').className = this.closest('li').className + ' editing'; this.closest('li').querySelector('input.edit').focus(); this.closest('li').querySelector('input.edit').value = ''; this.closest('li').querySelector('input.edit').value = '#{todo.title}';") #{todo.title}
+                  button.destroy(form="delete-"+todo.id)
+                input.edit(name='title' value=todo.title onkeyup="if (event.keyCode == 27) { this.setAttribute('data-esc', ''); this.closest('li').className = this.closest('li').className.replace('editing', ''); }" onblur="if (this.getAttribute('data-esc') !== null) { return this.removeAttribute('data-esc'); } this.form.submit();")
+                if filter
+                  input(type='hidden' name='filter' value=filter)
+                input(type='hidden' name='_csrf' value=csrfToken)
+              form(id="delete-"+todo.id action=todo.url+"/delete" method='post')
+                if filter
+                  input(type='hidden' name='filter' value=filter)
+                input(type='hidden' name='_csrf' value=csrfToken)
+
+      footer.footer
+        span.todo-count
+          strong= activeCount
+          pluralize('item', activeCount) left
+        ul.filters
+          li
+            a(class=!filter?'selected':''  href="/") All
+          li
+            a(class=(filter == 'active')?'selected':'' href="/active") Active
+          li
+            a(class=(filter == 'completed')?'selected':'' href="/completed") Completed
+        if (completedCount > 0)
+          form(action='/clear-completed' method='post')
+            button.clear-completed Clear completed
+            if (filter)
+              input(type='hidden' name='filter' value=filter)
+            input(type='hidden' name='_csrf' value=csrfToken)
