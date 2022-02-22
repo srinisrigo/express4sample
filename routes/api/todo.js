@@ -1,9 +1,6 @@
 var express = require('express');
-var ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
 var db = require('../../db');
 const { v4: uuid } = require('uuid');
-
-var ensureLoggedIn = ensureLogIn();
 
 async function getItems() {
     return new Promise((acc, rej) => {
@@ -72,12 +69,12 @@ async function removeItem(id) {
 
 var router = express.Router();
 
-router.get('/', ensureLoggedIn, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     const items = await getItems();
     res.send(items);
 });
 
-router.post('/', ensureLoggedIn, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
     const item = {
         id: uuid(),
         name: req.body.name,
@@ -88,7 +85,7 @@ router.post('/', ensureLoggedIn, async (req, res, next) => {
     res.send(item);
 });
 
-router.put('/:id', ensureLoggedIn, async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
     await updateItem(req.params.id, {
         name: req.body.name,
         completed: req.body.completed,
@@ -97,7 +94,7 @@ router.put('/:id', ensureLoggedIn, async (req, res, next) => {
     res.send(item);
 });
 
-router.delete('/:id', ensureLoggedIn, async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
     await removeItem(req.params.id);
     res.sendStatus(200);
 });

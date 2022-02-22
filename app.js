@@ -13,6 +13,7 @@ var SQLiteStore = require('connect-sqlite3')(session);
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
+var reactRouter = require('./routes/react');
 var apiRouter = require('./routes/api/todo');
 
 var app = express();
@@ -34,6 +35,8 @@ app.use(session({
   saveUninitialized: false, // don't create session until something stored
   store: new SQLiteStore({ db: 'sessions.db', dir: 'db' })
 }));
+app.use('/react', reactRouter);
+app.use('/api/items', apiRouter);
 app.use(csrf({cookie: {
   httpOnly: true,
 }}));
@@ -45,15 +48,9 @@ app.use(function(req, res, next) {
   req.session.messages = [];
   next();
 });
-app.use(function(req, res, next) {
-  res.locals.csrfToken = req.csrfToken();
-  res.cookie('XSRF-TOKEN', req.csrfToken());
-  next();
-});
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
-app.use('/api/items', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
