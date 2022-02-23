@@ -48,6 +48,10 @@ app.use(function(req, res, next) {
   req.session.messages = [];
   next();
 });
+app.use(function(req, res, next) {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
